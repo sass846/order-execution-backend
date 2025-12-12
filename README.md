@@ -8,7 +8,7 @@
 ## Checklist
 
 ### Setup
-- [ ] Initialize Project (package.json, tsconfig, git)
+- [x] Initialize Project (package.json, tsconfig, git)
 - [ ] Setup Infrastructure (Docker Compose for Redis/Postgres)
 
 ### Implementation
