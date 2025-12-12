@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import websocket from '@fastify/websocket';
 import { z } from 'zod';
+import { orderQueue } from '../worker/queue.js';
 
 const fastify = Fastify({
     logger: true,
@@ -26,9 +27,15 @@ fastify.post('/api/orders/execute', async (request, reply) => {
     }
 
     // TODO: Add strict queue logic here
-    const orderId = "mock-order-uuid";
+    const { inputToken, outputToken, amount } = result.data;
 
-    return { orderId, status: 'PENDING' };
+    const job = await orderQueue.add('execute-order', {
+        inputToken,
+        outputToken,
+        amount,
+    });
+
+    return { orderId: job.id, status: 'PENDING' };
 });
 
 const start = async () => {

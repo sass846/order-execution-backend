@@ -14,7 +14,7 @@
 ### [ ] Implementation
 - [x] Implement Database Schema (Prisma)
 - [x] Implement Fastify Server
-- [ ] Implement Queue System (BullMQ)
+- [x] Implement Queue System (BullMQ)
 - [ ] Implement DEX Router & Mock Engine
 - [ ] Implement WebSocket Updates
 
