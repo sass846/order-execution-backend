@@ -7,17 +7,17 @@
 
 ## Checklist
 
-### Setup
+### [x] Setup
 - [x] Initialize Project (package.json, tsconfig, git)
 - [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
 
-### Implementation
+### [ ] Implementation
 - [ ] Implement Database Schema (Prisma)
 - [ ] Implement Fastify Server & Swagger API
 - [ ] Implement Queue System (BullMQ)
 - [ ] Implement DEX Router & Mock Engine
 - [ ] Implement WebSocket Updates
 
-### Verification
+### [ ] Verification
 - [ ] Verification & Testing
 - [ ] Demonstration Video
