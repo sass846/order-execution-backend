@@ -8,7 +8,7 @@ export interface Quote {
 
 export class RaydiumMock {
     async getQuote(tokenIn: string, tokenOut: string, amount: number): Promise<Quote> {
-        await sleep(200);
+        await sleep(2500);
 
         // lets say 1 sol = 150 usdc
         const basePrice = 150;
@@ -27,7 +27,7 @@ export class RaydiumMock {
 
 export class MeteoraMock {
     async getQuote(tokenIn: string, tokenOut: string, amount: number): Promise<Quote> {
-        await sleep(150);
+        await sleep(2000);
 
         const basePrice = 150;
         const variance = (Math.random() * 0.04) - 0.01;

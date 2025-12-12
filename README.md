@@ -8,9 +8,10 @@ This project is a high-performance, asynchronous Order Execution Engine designed
 - Real-Time Updates: WebSocket updates to the client for order status.
 
 ## Order Type Choice: Market Order
-**Why**: Market orders are the fundamental primitive for DEX interaction, allowing us to focus on the core "Submission -> Routing -> Execution" loop, latency optimization, and feedback mechanisms without the added complexity of state monitoring (Limit) or mempool sniffing (Sniper).
 
-**Extensibility**: To support Limit or Sniper orders, this engine can be extended by adding a "Trigger Service" that monitors on-chain conditions (price or new pool creation) and submits execution requests to this engine's API when criteria are met.
+I selected Market Orders because Raydium and Meteora AMMs naturally support immediate swaps at the best available pool price. Market orders demonstrate routing, execution, queue handling, and WebSocket streaming without additional price monitoring logic. So now we can focus on the core logic of the engine rather than price monitoring.
+
+Limit and sniper orders can be implemented later by adding price watchers (limit) or pool-creation listeners (sniper).
 
 ## Tech Stack
 - **Fastify**: High-performance web framework for Node.js
@@ -23,11 +24,11 @@ This project is a high-performance, asynchronous Order Execution Engine designed
 
 ## Checklist
 
-### [x] Setup
+### Setup
 - [x] Initialize Project (package.json, tsconfig, git)
 - [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
 
-### [ ] Implementation
+### Implementation
 - [x] Implement Database Schema (Prisma)
 - [x] Implement Fastify Server
 - [x] Implement Queue System (BullMQ)
@@ -35,7 +36,7 @@ This project is a high-performance, asynchronous Order Execution Engine designed
 - [x] Implement Execution Worker (Processors)
 - [x] Implement WebSocket Updates
 
-### [x] Verification
+### Verification
 - [x] Verification & Testing (See /test route)
 - [ ] Demonstration Video
 

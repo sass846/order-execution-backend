@@ -1,21 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Order Execution Test</title>
     <style>
-        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
-        .box { border: 1px solid #444; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
-        button { background: #0f0; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
-        button:hover { background: #0c0; }
-        #logs { white-space: pre-wrap; margin-top: 10px; }
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+
+        .box {
+            border: 1px solid #444;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        button {
+            background: #000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0c0;
+        }
+
+        input {
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 100px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        #logs {
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Order Execution Test</h1>
     <div class="box">
         <p>1. Make sure Worker is running (`npm run worker`)</p>
-        <p>2. Click below to simulate an Order</p>
+        <p>2. Configure Order:</p>
+
+        <div>
+            <label>Input Token:</label>
+            <input type="text" id="inputToken" value="SOL">
+        </div>
+        <div>
+            <label>Output Token:</label>
+            <input type="text" id="outputToken" value="USDC">
+        </div>
+        <div>
+            <label>Amount:</label>
+            <input type="number" id="amount" value="100">
+        </div>
+        <br>
         <button onclick="startTest()">🚀 SIMULATE ORDER</button>
     </div>
     <div class="box">
@@ -31,48 +87,58 @@
         };
 
         async function startTest() {
+            const inputToken = document.getElementById('inputToken').value;
+            const outputToken = document.getElementById('outputToken').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (!inputToken || !outputToken || !amount) {
+                alert('Please fill all fields');
+                return;
+            }
+
             logDiv.innerHTML = 'Starting...<br>';
-            
+
             // 1. Connect WS
             const ws = new WebSocket('ws://' + location.host + '/ws');
-            
+
             ws.onopen = async () => {
                 appendLog('✅ WebSocket Connected');
-                
+
                 // 2. Submit Order
                 try {
-                    appendLog('📤 Submitting Order `SOL -> USDC`...');
+                    appendLog(`📤 Submitting Order ${amount} ${inputToken} -> ${outputToken}...`);
                     const res = await fetch('/api/orders/execute', {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            inputToken: 'SOL', 
-                            outputToken: 'USDC', 
-                            amount: 100
+                            inputToken,
+                            outputToken,
+                            amount
                         })
                     });
                     const d = await res.json();
                     appendLog(`📋 Order Created: ${d.orderId} (${d.status})`);
-                    
+
                     // 3. Subscribe
                     appendLog(`🔔 Subscribing to updates...`);
                     ws.send(JSON.stringify({ type: 'subscribe', orderId: d.orderId }));
-                    
-                } catch(e) {
+
+                } catch (e) {
                     appendLog('❌ Error: ' + e.message);
                 }
             };
 
             ws.onmessage = (e) => {
                 const msg = JSON.parse(e.data);
-                appendLog(`📩 UPDATE: Order ${msg.status} ${msg.price ? '($'+msg.price.toFixed(2)+')' : ''} ${msg.txHash ? '(TX: '+msg.txHash+')' : ''}`);
-                
+                appendLog(`📩 UPDATE: Order ${msg.status} ${msg.price ? '($' + msg.price.toFixed(2) + ')' : ''} ${msg.txHash ? '(TX: ' + msg.txHash + ')' : ''}`);
+
                 if (msg.status === 'CONFIRMED' || msg.status === 'FAILED') {
-                     appendLog('✨ Flow Complete!');
-                     ws.close();
+                    appendLog('✨ Flow Complete!');
+                    ws.close();
                 }
             };
         }
     </script>
 </body>
+
 </html>
