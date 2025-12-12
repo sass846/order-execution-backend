@@ -16,6 +16,7 @@
 - [x] Implement Fastify Server
 - [x] Implement Queue System (BullMQ)
 - [ ] Implement DEX Router & Mock Engine
+- [ ] Implement Execution Worker (Processors)
 - [ ] Implement WebSocket Updates
 
 ### [ ] Verification
