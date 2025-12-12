@@ -13,13 +13,13 @@ This project is a high-performance, asynchronous Order Execution Engine designed
 **Extensibility**: To support Limit or Sniper orders, this engine can be extended by adding a "Trigger Service" that monitors on-chain conditions (price or new pool creation) and submits execution requests to this engine's API when criteria are met.
 
 ## Tech Stack
-- Fastify: High-performance web framework for Node.js
-- BullMQ: Queue system for decoupling submission from execution
-- Prisma: Database ORM for Postgres
-- Redis: In-memory data store for BullMQ
-- TypeScript: Typed JavaScript for better code quality
-- Docker: Containerization for consistent development environments
-- Docker Compose: running multiple containers (Redis, Postgres, Node.js)
+- **Fastify**: High-performance web framework for Node.js
+- **BullMQ**: Queue system for decoupling submission from execution
+- **Prisma**: Database ORM for Postgres
+- **Redis**: In-memory data store for BullMQ
+- **TypeScript**: Typed JavaScript for better code quality
+- **Docker**: Containerization for consistent development environments
+- **Docker Compose**: running multiple containers (Redis, Postgres, Node.js)
 
 ## Checklist
 
