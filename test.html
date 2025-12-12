@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Execution Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+        .box { border: 1px solid #444; padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        button { background: #0f0; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0c0; }
+        #logs { white-space: pre-wrap; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Order Execution Test</h1>
+    <div class="box">
+        <p>1. Make sure Worker is running (`npm run worker`)</p>
+        <p>2. Click below to simulate an Order</p>
+        <button onclick="startTest()">🚀 SIMULATE ORDER</button>
+    </div>
+    <div class="box">
+        <h3>Logs</h3>
+        <div id="logs">Waiting...</div>
+    </div>
+
+    <script>
+        const logDiv = document.getElementById('logs');
+        const appendLog = (msg) => {
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${time}] ${msg}</div>`;
+        };
+
+        async function startTest() {
+            logDiv.innerHTML = 'Starting...<br>';
+            
+            // 1. Connect WS
+            const ws = new WebSocket('ws://' + location.host + '/ws');
+            
+            ws.onopen = async () => {
+                appendLog('✅ WebSocket Connected');
+                
+                // 2. Submit Order
+                try {
+                    appendLog('📤 Submitting Order `SOL -> USDC`...');
+                    const res = await fetch('/api/orders/execute', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            inputToken: 'SOL', 
+                            outputToken: 'USDC', 
+                            amount: 100
+                        })
+                    });
+                    const d = await res.json();
+                    appendLog(`📋 Order Created: ${d.orderId} (${d.status})`);
+                    
+                    // 3. Subscribe
+                    appendLog(`🔔 Subscribing to updates...`);
+                    ws.send(JSON.stringify({ type: 'subscribe', orderId: d.orderId }));
+                    
+                } catch(e) {
+                    appendLog('❌ Error: ' + e.message);
+                }
+            };
+
+            ws.onmessage = (e) => {
+                const msg = JSON.parse(e.data);
+                appendLog(`📩 UPDATE: Order ${msg.status} ${msg.price ? '($'+msg.price.toFixed(2)+')' : ''} ${msg.txHash ? '(TX: '+msg.txHash+')' : ''}`);
+                
+                if (msg.status === 'CONFIRMED' || msg.status === 'FAILED') {
+                     appendLog('✨ Flow Complete!');
+                     ws.close();
+                }
+            };
+        }
+    </script>
+</body>
+</html>

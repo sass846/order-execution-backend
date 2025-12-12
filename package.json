@@ -4,6 +4,9 @@
   "description": "Order Execution Engine",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/api/server.js",
+    "start:worker": "node dist/worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --exec node --import ./ts-node-register.js src/api/server.ts",
     "worker": "nodemon --watch src --exec node --import ./ts-node-register.js src/worker/index.ts"
@@ -27,6 +30,7 @@
     "dotenv": "^17.2.3",
     "fastify": "^5.6.2",
     "ioredis": "^5.8.2",
+    "ws": "^8.18.3",
     "zod": "^4.1.13"
   },
   "devDependencies": {

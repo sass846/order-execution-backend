@@ -17,8 +17,8 @@
 - [x] Implement Queue System (BullMQ)
 - [x] Implement DEX Router & Mock Engine
 - [x] Implement Execution Worker (Processors)
-- [ ] Implement WebSocket Updates
+- [x] Implement WebSocket Updates
 
-### [ ] Verification
-- [ ] Verification & Testing
+### [x] Verification
+- [x] Verification & Testing (See /test route)
 - [ ] Demonstration Video

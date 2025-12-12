@@ -1,5 +1,34 @@
 version: '3.8'
 services:
+  api:
+    build: .
+    container_name: order-exec-api
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/order_exec_db?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - order-exec-network
+
+  worker:
+    build: .
+    container_name: order-exec-worker
+    command: npm run start:worker
+    environment:
+      - DATABASE_URL=postgresql://user:password@postgres:5432/order_exec_db?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - order-exec-network
+
   redis:
     image: redis:alpine
     container_name: redis
@@ -7,19 +36,28 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - order-exec-network
 
   postgres:
     image: postgres:15-alpine
     container_name: postgres
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: order_exec_db
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - order-exec-network
 
 volumes:
   redis_data:
   postgres_data:
+
+
+networks:
+  order-exec-network:
+    driver: bridge

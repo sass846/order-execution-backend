@@ -28,9 +28,11 @@
     "moduleDetection": "auto",
     // Recommended backend settings
     "exactOptionalPropertyTypes": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "outDir": "./dist"
   },
   "include": [
-    "src"
+    "src",
+    "scripts"
   ]
 }
