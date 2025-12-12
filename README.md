@@ -9,7 +9,7 @@
 
 ### Setup
 - [x] Initialize Project (package.json, tsconfig, git)
-- [ ] Setup Infrastructure (Docker Compose for Redis/Postgres)
+- [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
 
 ### Implementation
 - [ ] Implement Database Schema (Prisma)
