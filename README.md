@@ -12,8 +12,8 @@
 - [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
 
 ### [ ] Implementation
-- [ ] Implement Database Schema (Prisma)
-- [ ] Implement Fastify Server & Swagger API
+- [x] Implement Database Schema (Prisma)
+- [x] Implement Fastify Server
 - [ ] Implement Queue System (BullMQ)
 - [ ] Implement DEX Router & Mock Engine
 - [ ] Implement WebSocket Updates
