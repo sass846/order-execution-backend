@@ -15,8 +15,8 @@
 - [x] Implement Database Schema (Prisma)
 - [x] Implement Fastify Server
 - [x] Implement Queue System (BullMQ)
-- [ ] Implement DEX Router & Mock Engine
-- [ ] Implement Execution Worker (Processors)
+- [x] Implement DEX Router & Mock Engine
+- [x] Implement Execution Worker (Processors)
 - [ ] Implement WebSocket Updates
 
 ### [ ] Verification

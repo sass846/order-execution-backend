@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --exec node --import ./ts-node-register.js src/api/server.ts"
+    "dev": "nodemon --watch src --exec node --import ./ts-node-register.js src/api/server.ts",
+    "worker": "nodemon --watch src --exec node --import ./ts-node-register.js src/worker/index.ts"
   },
   "repository": {
     "type": "git",
