@@ -40,3 +40,46 @@ Limit and sniper orders can be implemented later by adding price watchers (limit
 - [x] Verification & Testing (See /test route)
 - [ ] Demonstration Video
 
+43: 
+44: ## How to Run
+45: 
+46: ### Prerequisites
+47: - Node.js v20+
+48: - Docker & Docker Compose
+49: 
+50: ### Setup
+51: 1. Install dependencies:
+52:    ```bash
+53:    npm install
+54:    ```
+55: 2. Set up environment variables:
+56:    ```bash
+57:    cp .env.example .env
+58:    ```
+59: 3. Start Infrastructure (Redis & Postgres):
+60:    ```bash
+61:    docker compose up -d redis postgres
+62:    ```
+63: 4. Push Database Schema:
+64:    ```bash
+65:    npx prisma db push
+66:    ```
+67: 
+68: ### Execution
+69: 
+70: #### Option A: Run Locally (Recommended for Dev)
+71: 
+72: 1. Start the API Server:
+73:    ```bash
+74:    npm run dev
+75:    ```
+76: 2. Start the Worker (in a separate terminal):
+77:    ```bash
+78:    npm run worker
+79:    ```
+80: 
+81: #### Option B: Run with Docker
+82: Build and start all services (API, Worker, Redis, Postgres):
+83: ```bash
+84: docker compose up --build
+85: ```

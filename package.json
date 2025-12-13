@@ -8,8 +8,8 @@
     "start": "node dist/src/api/server.js",
     "start:worker": "node dist/src/worker/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch src --exec node --import ./ts-node-register.js src/api/server.ts",
-    "worker": "nodemon --watch src --exec node --import ./ts-node-register.js src/worker/index.ts",
+    "dev": "tsx watch src/api/server.ts",
+    "worker": "tsx watch src/worker/index.ts",
     "start:render": "node dist/src/worker/index.js & node dist/src/api/server.js"
   },
   "repository": {
@@ -50,6 +50,7 @@
     "prisma": "^6.19.1",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }
