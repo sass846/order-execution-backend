@@ -9,6 +9,10 @@ This project is a high-performance, asynchronous Order Execution Engine designed
 - Smart Routing: Compares the prices between Raydium and Meteora (Mocked) to find the best route.
 - Real-Time Updates: WebSocket updates to the client for order status.
 
+## Deployment
+
+**Live URL:** [https://order-execution-backend-3.onrender.com](https://order-execution-backend-3.onrender.com)
+
 ## Order Type Choice: Market Order
 
 I selected Market Orders because Raydium and Meteora AMMs naturally support immediate swaps at the best available pool price. Market orders demonstrate routing, execution, queue handling, and WebSocket streaming without additional price monitoring logic. So now we can focus on the core logic of the engine rather than price monitoring.
@@ -29,26 +33,7 @@ Limit and sniper orders can be implemented later by adding price watchers (limit
 
 ![Order Execution Pipeline](./flow-diagram/DEX-Order-Execution-Pipeline.png)
 
-## Checklist
 
-### Setup
-
-- [x] Initialize Project (package.json, tsconfig, git)
-- [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
-
-### Implementation
-
-- [x] Implement Database Schema (Prisma)
-- [x] Implement Fastify Server
-- [x] Implement Queue System (BullMQ)
-- [x] Implement DEX Router & Mock Engine
-- [x] Implement Execution Worker (Processors)
-- [x] Implement WebSocket Updates
-
-### Verification
-
-- [x] Verification & Testing (See /test route)
-- [ ] Demonstration Video
 
 ## How to Run
 
@@ -96,3 +81,29 @@ Build and start all services (API, Worker, Redis, Postgres):
 ```bash
 docker compose up --build
 ```
+
+## Checklist
+
+### Setup
+
+- [x] Initialize Project (package.json, tsconfig, git)
+- [x] Setup Infrastructure (Docker Compose for Redis/Postgres)
+
+### Implementation
+
+- [x] Implement Database Schema (Prisma)
+- [x] Implement Fastify Server
+- [x] Implement Queue System (BullMQ)
+- [x] Implement DEX Router & Mock Engine
+- [x] Implement Execution Worker (Processors)
+- [x] Implement WebSocket Updates
+
+### Verification
+
+- [x] Verification & Testing (See /test route)
+- [x] Demonstration Video
+- [x] Deployment
+
+### Future Improvements
+
+- [ ] Real DEX implementation on devnet
