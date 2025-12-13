@@ -1,15 +1,9 @@
 import { Job } from "bullmq";
 import { DexRouter } from "../engine/dexRouter.js";
-import { Redis } from "ioredis";
+import { redisPublisher } from "../redis.js";
 import { prisma } from "../prisma.js";
 
 const router = new DexRouter();
-
-const redisPublisher = new Redis({
-  host: process.env.REDIS_HOST || "127.0.0.1",
-  port: Number(process.env.REDIS_PORT) || 6379,
-  maxRetriesPerRequest: null,
-});
 
 export const executionProcessor = async (job: Job) => {
   // Get the existing orderId from the job (passed by API)
@@ -18,9 +12,11 @@ export const executionProcessor = async (job: Job) => {
     `[Worker] Processing Job ${job.id} for Order ${orderId}: ${amount} ${inputToken} -> ${outputToken}`
   );
 
+  await new Promise(r => setTimeout(r, 1000));
+
   const publishUpdate = async (status: string, data: any = {}) => {
     await redisPublisher.publish(
-      `order: ${orderId}`,
+      `order:${orderId}`,
       JSON.stringify({ orderId, status, ...data })
     );
   };
@@ -28,11 +24,11 @@ export const executionProcessor = async (job: Job) => {
   try {
     // Routing
     await job.updateProgress(10);
-    await publishUpdate("ROUTING");
+    await publishUpdate("routing");
 
     await prisma.order.update({
       where: { id: orderId },
-      data: { status: "ROUTING" },
+      data: { status: "routing" },
     });
 
     const quote = await router.getBestQuote(inputToken, outputToken, amount);
@@ -41,15 +37,23 @@ export const executionProcessor = async (job: Job) => {
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        status: "BUILDING",
+        status: "building",
         dex: quote.dex,
       },
     });
 
-    await publishUpdate("BUILDING", { dex: quote.dex, price: quote.price });
+    await publishUpdate("building", { dex: quote.dex, price: quote.price });
 
     // Execution
     await job.updateProgress(50);
+
+    // Submitted
+    await publishUpdate("submitted");
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { status: "submitted" },
+    });
+
     console.log(`[Worker] Executing via ${quote.dex}...`);
     const result = await router.executeSwap(quote);
 
@@ -57,14 +61,14 @@ export const executionProcessor = async (job: Job) => {
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        status: "CONFIRMED",
+        status: "confirmed",
         txHash: result.txHash,
         executedPrice: result.executedPrice,
       },
     });
 
     await job.updateProgress(100);
-    await publishUpdate("CONFIRMED", {
+    await publishUpdate("confirmed", {
       txHash: result.txHash,
       executedPrice: result.executedPrice,
     });
@@ -79,12 +83,12 @@ export const executionProcessor = async (job: Job) => {
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        status: "FAILED",
+        status: "failed",
         error: errorMessage,
       },
     });
 
-    await publishUpdate("FAILED", { error: errorMessage });
+    await publishUpdate("failed", { error: errorMessage });
     throw error;
   }
 };

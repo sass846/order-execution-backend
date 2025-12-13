@@ -130,9 +130,17 @@
 
             ws.onmessage = (e) => {
                 const msg = JSON.parse(e.data);
-                appendLog(`--> UPDATE: Order ${msg.status} ${msg.price ? '($' + msg.price.toFixed(2) + ')' : ''} ${msg.txHash ? '(TX: ' + msg.txHash + ')' : ''}`);
 
-                if (msg.status === 'CONFIRMED' || msg.status === 'FAILED') {
+                let details = '';
+                if (msg.price) details += ` ($${msg.price.toFixed(2)})`;
+                if (msg.executedPrice) details += ` (Exec: $${msg.executedPrice.toFixed(2)})`;
+                if (msg.dex) details += ` [${msg.dex}]`;
+                if (msg.txHash) details += ` (TX: ${msg.txHash})`;
+                if (msg.error) details += ` (Error: ${msg.error})`;
+
+                appendLog(`--> UPDATE: [${msg.status.toUpperCase()}] ${details}`);
+
+                if (msg.status === 'confirmed' || msg.status === 'failed') {
                     appendLog('Order Complete!');
                     ws.close();
                 }
