@@ -99,7 +99,8 @@
             logDiv.innerHTML = 'Starting...<br>';
 
             // Connect WS
-            const ws = new WebSocket('ws://' + location.host + '/ws');
+            const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const ws = new WebSocket(protocol + '//' + location.host + '/ws');
 
             ws.onopen = async () => {
                 appendLog('--> WebSocket Connected');
