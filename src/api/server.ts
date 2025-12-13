@@ -3,7 +3,7 @@ import websocket from '@fastify/websocket';
 import { z } from 'zod';
 import { orderQueue } from '../worker/queue.js';
 import { Redis } from 'ioredis';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../prisma.js';
 
 import fs from 'fs';
 import path from 'path';
@@ -15,8 +15,6 @@ const __dirname = path.dirname(__filename);
 const fastify = Fastify({
     logger: true,
 })
-
-const prisma = new PrismaClient();
 
 const OrderSchema = z.object({
     inputToken: z.string(),

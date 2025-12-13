@@ -72,7 +72,7 @@
             <input type="number" id="amount" value="100">
         </div>
         <br>
-        <button onclick="startTest()">🚀 SIMULATE ORDER</button>
+        <button onclick="startTest()">SIMULATE ORDER</button>
     </div>
     <div class="box">
         <h3>Logs</h3>
@@ -98,15 +98,15 @@
 
             logDiv.innerHTML = 'Starting...<br>';
 
-            // 1. Connect WS
+            // Connect WS
             const ws = new WebSocket('ws://' + location.host + '/ws');
 
             ws.onopen = async () => {
-                appendLog('✅ WebSocket Connected');
+                appendLog('--> WebSocket Connected');
 
                 // 2. Submit Order
                 try {
-                    appendLog(`📤 Submitting Order ${amount} ${inputToken} -> ${outputToken}...`);
+                    appendLog(`--> Submitting Order ${amount} ${inputToken} -> ${outputToken}...`);
                     const res = await fetch('/api/orders/execute', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -117,23 +117,23 @@
                         })
                     });
                     const d = await res.json();
-                    appendLog(`📋 Order Created: ${d.orderId} (${d.status})`);
+                    appendLog(`--> Order Created: ${d.orderId} (${d.status})`);
 
                     // 3. Subscribe
-                    appendLog(`🔔 Subscribing to updates...`);
+                    appendLog(`--> Subscribing to updates...`);
                     ws.send(JSON.stringify({ type: 'subscribe', orderId: d.orderId }));
 
                 } catch (e) {
-                    appendLog('❌ Error: ' + e.message);
+                    appendLog('x Error: ' + e.message);
                 }
             };
 
             ws.onmessage = (e) => {
                 const msg = JSON.parse(e.data);
-                appendLog(`📩 UPDATE: Order ${msg.status} ${msg.price ? '($' + msg.price.toFixed(2) + ')' : ''} ${msg.txHash ? '(TX: ' + msg.txHash + ')' : ''}`);
+                appendLog(`--> UPDATE: Order ${msg.status} ${msg.price ? '($' + msg.price.toFixed(2) + ')' : ''} ${msg.txHash ? '(TX: ' + msg.txHash + ')' : ''}`);
 
                 if (msg.status === 'CONFIRMED' || msg.status === 'FAILED') {
-                    appendLog('✨ Flow Complete!');
+                    appendLog('Order Complete!');
                     ws.close();
                 }
             };
