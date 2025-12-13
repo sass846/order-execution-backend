@@ -25,6 +25,10 @@ Limit and sniper orders can be implemented later by adding price watchers (limit
 - **Docker**: Containerization for consistent development environments
 - **Docker Compose**: running multiple containers (Redis, Postgres, Node.js)
 
+## Order Execution Pipeline
+
+![Order Execution Pipeline](./flow-diagram/DEX-Order-Execution-Pipeline.png)
+
 ## Checklist
 
 ### Setup
