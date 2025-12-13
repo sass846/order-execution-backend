@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/src/api/server.js",
+    "start": "node dist/src/index.js",
     "start:worker": "node dist/src/worker/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx watch src/api/server.ts",
+    "test": "npx jest",
+    "dev": "tsx watch src/index.ts",
     "worker": "tsx watch src/worker/index.ts",
-    "start:render": "node dist/src/worker/index.js & node dist/src/api/server.js"
+    "start:render": "node dist/src/worker/index.js & node dist/src/index.js"
   },
   "repository": {
     "type": "git",

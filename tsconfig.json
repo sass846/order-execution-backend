@@ -15,7 +15,7 @@
     // Backend only — no JSX
     "jsx": "react-jsx",
     // Better TS experience, keeps ESM clean
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     // REQUIRED for ts-node when using ESM
     "isolatedModules": false,
     // Output helpful debugging data
