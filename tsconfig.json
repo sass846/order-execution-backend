@@ -6,9 +6,6 @@
     "lib": [
       "ES2020"
     ],
-    "types": [
-      "node"
-    ],
     // Interop is REQUIRED for Prisma + ESM
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
